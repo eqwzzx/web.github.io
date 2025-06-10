@@ -2,14 +2,22 @@ import NextAuth from "next-auth"
 import DiscordProvider from "next-auth/providers/discord"
 import type { NextAuthOptions } from "next-auth"
 
+// Конфигурация для разработки (замените на ваши реальные значения)
+const DISCORD_CONFIG = {
+  clientId: process.env.DISCORD_CLIENT_ID || "1381647541610741891",
+  clientSecret: process.env.DISCORD_CLIENT_SECRET || "nqxh4mOMZOx5xmFXBKDdfsDUy0VUk7JO",
+  nextAuthSecret: process.env.NEXTAUTH_SECRET || "00110022003300440055",
+  nextAuthUrl: process.env.NEXTAUTH_URL || "https://web-github-io-two.vercel.app/api/auth/callback/discord",
+}
+
 const authOptions: NextAuthOptions = {
   providers: [
     DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID!,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET!,
+      clientId: DISCORD_CONFIG.clientId,
+      clientSecret: DISCORD_CONFIG.clientSecret,
       authorization: {
         params: {
-          scope: "identify email guilds",
+          scope: "identify email",
         },
       },
     }),
@@ -19,7 +27,7 @@ const authOptions: NextAuthOptions = {
       if (account && profile) {
         token.discordId = profile.id
         token.username = profile.username
-        token.discriminator = profile.discriminator
+        token.discriminator = profile.discriminator || "0000"
         token.avatar = profile.avatar
       }
       return token
@@ -41,7 +49,7 @@ const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: DISCORD_CONFIG.nextAuthSecret,
   debug: process.env.NODE_ENV === "development",
 }
 
