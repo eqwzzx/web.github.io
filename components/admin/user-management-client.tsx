@@ -1,9 +1,7 @@
 "use client"
 
 import { CardContent } from "@/components/ui/card"
-
 import { Card } from "@/components/ui/card"
-
 import { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
@@ -44,8 +42,8 @@ interface UserManagementClientProps {
   initialUsers: UserType[]
 }
 
-export default function UserManagementClient({ initialUsers }: UserManagementClientProps) {
-  const [users, setUsers] = useState<UserType[]>(initialUsers)
+export default function UserManagementClient({ initialUsers = [] }: UserManagementClientProps) {
+  const [users, setUsers] = useState<UserType[]>(initialUsers || [])
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null)
   const [actionType, setActionType] = useState<"block" | "unblock" | "makeAdmin" | "makeUser" | null>(null)
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false)
@@ -106,6 +104,16 @@ export default function UserManagementClient({ initialUsers }: UserManagementCli
     if (actionType === "makeUser")
       return `Are you sure you want to demote ${userName} to a regular user? They will lose administrative privileges.`
     return ""
+  }
+
+  if (!users || users.length === 0) {
+    return (
+      <Card>
+        <CardContent className="p-6 text-center">
+          <p className="text-muted-foreground">No users found.</p>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
