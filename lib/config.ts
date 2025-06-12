@@ -1,4 +1,4 @@
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://v0-discord-webhook-app-seven.vercel.app"
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://web-github-io-pi.vercel.app/"
 
 export const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || "1381647541610741891"
 export const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || "mGFi6xGTcUWNln4gefZDjG6duDWUcvFi"
