@@ -52,21 +52,21 @@ export default function EnhancedWebhookSender() {
   const addEmbedField = () => {
     setEmbed((prev) => ({
       ...prev,
-      fields: [...prev.fields, { name: "", value: "", inline: false }],
+      fields: [...(prev.fields || []), { name: "", value: "", inline: false }],
     }))
   }
 
   const updateEmbedField = (index: number, field: Partial<EmbedField>) => {
     setEmbed((prev) => ({
       ...prev,
-      fields: prev.fields.map((f, i) => (i === index ? { ...f, ...field } : f)),
+      fields: (prev.fields || []).map((f, i) => (i === index ? { ...f, ...field } : f)),
     }))
   }
 
   const removeEmbedField = (index: number) => {
     setEmbed((prev) => ({
       ...prev,
-      fields: prev.fields.filter((_, i) => i !== index),
+      fields: (prev.fields || []).filter((_, i) => i !== index),
     }))
   }
 
@@ -96,6 +96,7 @@ export default function EnhancedWebhookSender() {
           ...embed,
           color: embed.color ? Number.parseInt(embed.color.replace("#", ""), 16) : undefined,
           timestamp: embed.timestamp ? new Date().toISOString() : undefined,
+          fields: embed.fields || [],
         }
         payload.embeds = [embedData]
       }
@@ -259,7 +260,7 @@ export default function EnhancedWebhookSender() {
                         Add Field
                       </Button>
                     </div>
-                    {embed.fields.map((field, index) => (
+                    {(embed.fields || []).map((field, index) => (
                       <div key={index} className="p-3 border rounded bg-background space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium">Field {index + 1}</span>
@@ -270,12 +271,12 @@ export default function EnhancedWebhookSender() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                           <Input
                             placeholder="Field name"
-                            value={field.name}
+                            value={field.name || ""}
                             onChange={(e) => updateEmbedField(index, { name: e.target.value })}
                           />
                           <div className="flex items-center space-x-2">
                             <Switch
-                              checked={field.inline}
+                              checked={field.inline || false}
                               onCheckedChange={(checked) => updateEmbedField(index, { inline: checked })}
                             />
                             <Label className="text-sm">Inline</Label>
@@ -283,7 +284,7 @@ export default function EnhancedWebhookSender() {
                         </div>
                         <Textarea
                           placeholder="Field value"
-                          value={field.value}
+                          value={field.value || ""}
                           onChange={(e) => updateEmbedField(index, { value: e.target.value })}
                           rows={2}
                         />
@@ -323,7 +324,7 @@ export default function EnhancedWebhookSender() {
                     >
                       {embed.title && <h4 className="font-semibold text-sm mb-1">{embed.title}</h4>}
                       {embed.description && <p className="text-sm text-muted-foreground mb-2">{embed.description}</p>}
-                      {embed.fields.map((field, index) => (
+                      {(embed.fields || []).map((field, index) => (
                         <div key={index} className={`mt-2 ${field.inline ? "inline-block mr-4" : "block"}`}>
                           <div className="font-medium text-xs">{field.name}</div>
                           <div className="text-xs text-muted-foreground">{field.value}</div>
